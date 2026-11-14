@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Weight Tracker</title>
+  <meta name="description" content="A private weight-loss tracker. Your data stays on this device.">
+  <meta name="theme-color" content="#0f766e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Weight">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1>Weight Tracker</h1>
+    <button id="openSettings" class="btn ghost" type="button">Settings</button>
+  </header>
+
+  <main>
+    <section class="card" aria-labelledby="logTitle">
+      <h2 id="logTitle">Log weight</h2>
+      <form id="logForm" class="log-form" novalidate>
+        <label class="field">
+          <span>Date</span>
+          <input id="logDate" type="date" required>
+        </label>
+        <label class="field">
+          <span>Weight (lb)</span>
+          <input id="logWeight" type="number" inputmode="decimal" step="0.1" min="50" max="1000" placeholder="0.0" required>
+        </label>
+        <button id="logSubmit" class="btn primary" type="submit">Save</button>
+      </form>
+      <p id="logHint" class="hint" aria-live="polite"></p>
+    </section>
+
+    <section class="card" aria-labelledby="summaryTitle">
+      <h2 id="summaryTitle">Progress</h2>
+      <div id="summary"></div>
+    </section>
+
+    <section class="card" aria-labelledby="chartTitle">
+      <div class="card-head">
+        <h2 id="chartTitle">Chart</h2>
+        <div id="ranges" class="segmented" role="group" aria-label="Chart range">
+          <button type="button" data-range="30">1M</button>
+          <button type="button" data-range="90">3M</button>
+          <button type="button" data-range="365">1Y</button>
+          <button type="button" data-range="all">All</button>
+        </div>
+      </div>
+      <p id="chartReadout" class="readout"></p>
+      <div id="chartWrap" class="chart-wrap">
+        <svg id="chart" role="img" aria-label="Weight over time"></svg>
+        <p id="chartEmpty" class="empty" hidden>Log a couple of weigh-ins to see your chart.</p>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="statsTitle">
+      <h2 id="statsTitle">Stats</h2>
+      <dl id="stats" class="stats"></dl>
+    </section>
+
+    <section class="card" aria-labelledby="historyTitle">
+      <h2 id="historyTitle">History</h2>
+      <ul id="history" class="history"></ul>
+      <button id="historyMore" class="btn ghost wide" type="button" hidden>Show all</button>
+    </section>
+
+    <p class="footnote">Your data is stored only in this browser on this device. Use Settings → Export to back it up.</p>
+  </main>
+
+  <dialog id="settings" aria-labelledby="settingsTitle">
+    <form id="settingsForm" method="dialog" novalidate>
+      <h2 id="settingsTitle">Settings</h2>
+
+      <label class="field">
+        <span>Goal weight (lb)</span>
+        <input id="setGoal" type="number" inputmode="decimal" step="0.1" min="50" max="1000" placeholder="e.g. 170">
+      </label>
+
+      <div class="field">
+        <span>Height (for BMI)</span>
+        <div class="row">
+          <label class="unit"><input id="setFt" type="number" inputmode="numeric" min="3" max="8" step="1" placeholder="5" aria-label="Feet"><em>ft</em></label>
+          <label class="unit"><input id="setIn" type="number" inputmode="decimal" min="0" max="11.9" step="0.5" placeholder="9" aria-label="Inches"><em>in</em></label>
+        </div>
+      </div>
+
+      <div class="dialog-actions">
+        <button id="settingsCancel" class="btn ghost" type="button">Cancel</button>
+        <button class="btn primary" type="submit">Save</button>
+      </div>
+
+      <h3>Your data</h3>
+      <div class="data-actions">
+        <button id="exportJson" class="btn ghost" type="button">Export backup</button>
+        <button id="exportCsv" class="btn ghost" type="button">Export CSV</button>
+        <button id="importBtn" class="btn ghost" type="button">Import</button>
+        <button id="wipe" class="btn danger" type="button">Delete all</button>
+      </div>
+      <input id="importFile" type="file" accept=".json,.csv,application/json,text/csv" hidden>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
